@@ -22,6 +22,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
@@ -32,11 +33,10 @@ import javax.swing.JScrollPane;
 public class Todo extends javax.swing.JFrame {
     private int posX = 0, posY = 0;
     private int date; // 0 == today, 1 == next1day, 2 == next3day ..... and more
-    private String weekDay;
-    private String month;
+    private String project; // select project
     
-    private Calendar calendar = Calendar.getInstance();
     private ArrayList<TaskResponse> task = new <TaskResponse>ArrayList();
+    private ArrayList<String> projectName = new <TaskResponse>ArrayList();
 
     private DateController dateController = new DateController();
     private UserController user = new UserController();
@@ -50,6 +50,14 @@ public class Todo extends javax.swing.JFrame {
         this.taskController = taskController;
     }
 
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
     public UserController getUser() {
         return user;
     }
@@ -57,8 +65,39 @@ public class Todo extends javax.swing.JFrame {
     public void setUser(UserController user) {
         this.user = user;
     }
-    
 
+    public JLabel getjLabel22() {
+        return jLabel22;
+    }
+
+    public void setjLabel22(JLabel jLabel22) {
+        this.jLabel22 = jLabel22;
+    }
+
+    public JPanel getjPanel4() {
+        return jPanel4;
+    }
+
+    public void setjPanel4(JPanel jPanel4) {
+        this.jPanel4 = jPanel4;
+    }
+
+    public JPanel getjPanel7() {
+        return jPanel7;
+    }
+
+    public void setjPanel7(JPanel jPanel7) {
+        this.jPanel7 = jPanel7;
+    }
+
+    public JPanel getjPanel17() {
+        return jPanel17;
+    }
+
+    public void setjPanel17(JPanel jPanel17) {
+        this.jPanel17 = jPanel17;
+    }
+    
     public JLabel getjLabel9() {
         return jLabel9;
     }
@@ -78,8 +117,12 @@ public class Todo extends javax.swing.JFrame {
         user.setEmail(email);
         jLabel7.setIcon(new ImageIcon("./assets/redLind.png"));
         jLabel10.setIcon(new ImageIcon("./assets/redLind.png"));
-        jLabel8.setIcon(new ImageIcon("./assets/addButton.png"));               
+        jLabel24.setIcon(new ImageIcon("./assets/redLind.png"));
+        jLabel10.setIcon(new ImageIcon("./assets/redLind.png"));
+        jLabel8.setIcon(new ImageIcon("./assets/addButton.png"));
+        
         jLabel16.setIcon(new ImageIcon("./assets/addButton.png"));
+        jLabel23.setIcon(new ImageIcon("./assets/addButton.png"));
 
         this.taskController = new TaskController();
         
@@ -100,10 +143,12 @@ public class Todo extends javax.swing.JFrame {
         jPanel10.setLayout(new BoxLayout(jPanel10, BoxLayout.Y_AXIS));
         jPanel12.setLayout(new BoxLayout(jPanel12, BoxLayout.Y_AXIS));
         jPanel14.setLayout(new BoxLayout(jPanel14, BoxLayout.Y_AXIS));
+        jPanel17.setLayout(new BoxLayout(jPanel17, BoxLayout.Y_AXIS));
         
         jPanel10.add(Box.createVerticalGlue());
         jPanel12.add(Box.createVerticalGlue());
         jPanel14.add(Box.createVerticalGlue());
+        jPanel17.add(Box.createVerticalGlue());
         
         JScrollBar scrollBar1 = new JScrollBar(JScrollBar.VERTICAL) {
             @Override
@@ -125,21 +170,37 @@ public class Todo extends javax.swing.JFrame {
                 return true;
             }
         };
+        
+        JScrollBar scrollBar4 = new JScrollBar(JScrollBar.VERTICAL) {
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
+        };
 
         jScrollPane1.setVerticalScrollBar(scrollBar1);
         jScrollPane2.setVerticalScrollBar(scrollBar2);
         jScrollPane3.setVerticalScrollBar(scrollBar3);
+        jScrollPane3.setVerticalScrollBar(scrollBar4);
         
         jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         jScrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        jScrollPane4.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
         task = taskController.getTask(user.getEmail(), dateController.getDocFormat(0));
         for (int counter = 0; counter < task.size(); counter++) { 		      
             jPanel10.add(new SingleTask(task.get(counter).getTask(), this, Boolean.parseBoolean(task.get(counter).getFistTimeEdit()), task.get(counter).getId()), 0);
             jPanel10.revalidate();
             jPanel10.repaint();
-        }   
+        }
+        
+        projectName = taskController.getProjects(user.getEmail());
+        for (int counter = 0; counter < projectName.size(); counter++) { 		      
+            jPanel14.add(new SingleProject(this, projectName.get(counter).toString()), 0);
+            jPanel14.revalidate();
+            jPanel14.repaint();
+        }
     }
 
     /**
@@ -189,6 +250,13 @@ public class Todo extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel12 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
+        jPanel15 = new javax.swing.JPanel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jPanel16 = new javax.swing.JPanel();
+        jLabel24 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jPanel17 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -348,9 +416,9 @@ public class Todo extends javax.swing.JFrame {
             }
         });
 
-        jLabel21.setFont(new java.awt.Font("SansSerif", 3, 12)); // NOI18N
+        jLabel21.setFont(new java.awt.Font("SansSerif", 3, 11)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(227, 227, 227));
-        jLabel21.setText("        Create new project");
+        jLabel21.setText("Create new project");
         jLabel21.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel21MouseClicked(evt);
@@ -374,7 +442,7 @@ public class Todo extends javax.swing.JFrame {
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 249, Short.MAX_VALUE)
+            .addGap(0, 271, Short.MAX_VALUE)
         );
 
         jScrollPane3.setViewportView(jPanel14);
@@ -388,18 +456,21 @@ public class Todo extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel21)
+                        .addGap(61, 61, 61))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -428,9 +499,9 @@ public class Todo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel21)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -532,7 +603,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 723, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel5Layout.setVerticalGroup(
@@ -622,7 +693,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 662, Short.MAX_VALUE)
+            .addGap(0, 686, Short.MAX_VALUE)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -639,7 +710,7 @@ public class Todo extends javax.swing.JFrame {
             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -656,16 +727,101 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.add(jPanel6, "card2");
 
         jPanel7.setBackground(new java.awt.Color(31, 31, 31));
+        jPanel7.setMaximumSize(new java.awt.Dimension(682, 653));
+        jPanel7.setMinimumSize(new java.awt.Dimension(682, 653));
+        jPanel7.setPreferredSize(new java.awt.Dimension(682, 653));
+
+        jPanel15.setBackground(new java.awt.Color(31, 31, 31));
+
+        jLabel22.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(227, 227, 227));
+        jLabel22.setText("Project");
+
+        jLabel23.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(227, 227, 227));
+        jLabel23.setText("Add Task");
+        jLabel23.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel23MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jLabel23MouseEntered(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel23)
+                .addContainerGap())
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel22)
+                    .addComponent(jLabel23))
+                .addGap(0, 0, 0))
+        );
+
+        jPanel16.setBackground(new java.awt.Color(31, 31, 31));
+
+        jLabel24.setBackground(new java.awt.Color(31, 31, 31));
+
+        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
+        jPanel16.setLayout(jPanel16Layout);
+        jPanel16Layout.setHorizontalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel16Layout.setVerticalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jScrollPane4.setBackground(new java.awt.Color(31, 31, 31));
+        jScrollPane4.setBorder(null);
+
+        jPanel17.setBackground(new java.awt.Color(31, 31, 31));
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 686, Short.MAX_VALUE)
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 630, Short.MAX_VALUE)
+        );
+
+        jScrollPane4.setViewportView(jPanel17);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 653, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel4.add(jPanel7, "card2");
@@ -674,9 +830,9 @@ public class Todo extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1002, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1003, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -697,7 +853,7 @@ public class Todo extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1003, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -734,10 +890,11 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
         
         this.date = 0;
-        jLabel20.setText(dateController.getDateFormat(1));
+        this.project = "notSelectProjectYet";
+        jLabel6.setText(dateController.getDateFormat(0));
         
         try {
-            task = taskController.getTask(user.getEmail(), dateController.getDocFormat(1));
+            task = taskController.getTask(user.getEmail(), dateController.getDocFormat(0));
             System.out.println("Size: " + task.size());
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(Todo.class.getName()).log(Level.SEVERE, null, ex);
@@ -822,6 +979,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 1;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(1));
         
         try {
@@ -852,6 +1010,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 2;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(2));
         
         try {
@@ -882,6 +1041,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 3;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(3));
         
         try {
@@ -912,6 +1072,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 4;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(4));
         
         try {
@@ -942,6 +1103,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 5;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(5));
         
         try {
@@ -972,6 +1134,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 6;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(6));
         
         try {
@@ -1002,6 +1165,7 @@ public class Todo extends javax.swing.JFrame {
         jPanel4.revalidate();
 
         this.date = 7;
+        this.project = "notSelectProjectYet";
         jLabel20.setText(dateController.getDateFormat(7));
         
         try {
@@ -1027,6 +1191,17 @@ public class Todo extends javax.swing.JFrame {
         jPanel14.revalidate();
         jPanel14.repaint();
     }//GEN-LAST:event_jLabel21MouseClicked
+
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
+        jLabel9.setText("Database :");
+        jPanel17.add(new SingleTask("Add your new task here!", this.date, this), 0);
+        jPanel17.revalidate();
+        jPanel17.repaint();
+    }//GEN-LAST:event_jLabel23MouseClicked
+
+    private void jLabel23MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseEntered
+        jLabel23.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_jLabel23MouseEntered
 
     /**
      * @param args the command line arguments
@@ -1082,6 +1257,9 @@ public class Todo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1095,6 +1273,9 @@ public class Todo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1106,6 +1287,7 @@ public class Todo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     // End of variables declaration//GEN-END:variables
 
 }

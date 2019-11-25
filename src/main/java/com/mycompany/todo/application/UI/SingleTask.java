@@ -31,19 +31,18 @@ public class SingleTask extends javax.swing.JPanel {
      * Creates new form SingleTask
      */
     
-    public SingleTask(String str, int numDate, Todo mainUI) {
+    public SingleTask(String task, int numDate, Todo mainUI) {
         initComponents();
         this.date = numDate;
         this.isFirstEdit = true;
         this.todoapp = mainUI;
         this.todoapp.getjLabel9().setText("Database: ");
         
-        jTextField1.setCaretColor(Color.WHITE);
-        jTextField1.setText(str);
+        jTextField1.setText(task);
         jLabel2.setIcon(new ImageIcon("./assets/line.png"));
     }
 
-    public SingleTask(String str, Todo mainUI, boolean firstTimeEdit, String id) {
+    public SingleTask(String task, Todo mainUI, boolean firstTimeEdit, String id) {
         initComponents();
         this.isFirstEdit = firstTimeEdit;
         this.todoapp = mainUI;
@@ -54,8 +53,7 @@ public class SingleTask extends javax.swing.JPanel {
             this.isTaskDone = false;
         }
         
-        jTextField1.setText(str);
-        jTextField1.setCaretColor(Color.WHITE);
+        jTextField1.setText(task);
         jTextField1.setEditable(false);
         jTextField1.setBackground(myDeepBlack);
         jLabel2.setIcon(new ImageIcon("./assets/line.png"));
@@ -157,16 +155,29 @@ public class SingleTask extends javax.swing.JPanel {
             jLabel1.setText("Edit");
 
             if (this.isFirstEdit) {
+                // add new task
                 try {
-                    this.docId = todoapp.getTaskController().addTask(todoapp.getUser().getEmail(), jTextField1.getText(), dateController.getDocFormat(this.date));
+                    
+                    if (todoapp.getProject().equals("notSelectProjectYet")) {
+                        this.docId = todoapp.getTaskController().addTask(todoapp.getUser().getEmail(), jTextField1.getText(), dateController.getDocFormat(this.date));
+                    } else {
+                        this.docId = todoapp.getTaskController().addProjectTask(todoapp.getUser().getEmail(), todoapp.getProject(), jTextField1.getText());
+                    }
+                    
+                    
                 } catch (IOException | InterruptedException | ExecutionException ex) {
                     Logger.getLogger(SingleTask.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 this.isFirstEdit = false;
                 
             } else {
+                // update task
                 try {
-                    todoapp.getTaskController().updateTask(todoapp.getUser().getEmail(), this.docId, jTextField1.getText());
+                    if (todoapp.getProject().equals("notSelectProjectYet")) {
+                        todoapp.getTaskController().updateTask(todoapp.getUser().getEmail(), this.docId, jTextField1.getText());
+                    } else {
+                        todoapp.getTaskController().updateProjectTask(todoapp.getUser().getEmail(), this.docId, jTextField1.getText());
+                    }
                 } catch (InterruptedException | ExecutionException ex) {
                     Logger.getLogger(SingleTask.class.getName()).log(Level.SEVERE, null, ex);
                 }

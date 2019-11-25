@@ -24,7 +24,7 @@ import org.apache.http.util.EntityUtils;
  * @author UomrodPC
  */
 public class AuthController {
-
+    AuthResponse userInfo; 
     public static String signUpNewUser(String email, String password) throws IOException {
 
         HttpPost post = new HttpPost("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDLv0RpndQmLMLw7nX3qfbgLzE1W-tFsyU");
@@ -35,7 +35,8 @@ public class AuthController {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post)) {
             Gson gson = new Gson();
-            Response userInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), Response.class);
+            AuthResponse userInfo = new AuthResponse(); 
+            userInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), AuthResponse.class);
 
             if (userInfo.getEmail() == null) {
                 return userInfo.getError().getMessage();
@@ -57,7 +58,8 @@ public class AuthController {
 
             // System.out.println(EntityUtils.toString(response.getEntity()));
             Gson gson = new Gson();
-            Response userInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), Response.class);
+            AuthResponse userInfo = new AuthResponse(); 
+            userInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), AuthResponse.class);
 
             if (userInfo.getEmail() == null) {
                 return userInfo.getError().getMessage();
