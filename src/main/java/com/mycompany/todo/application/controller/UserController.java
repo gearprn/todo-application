@@ -5,10 +5,6 @@
  */
 package com.mycompany.todo.application.controller;
 
-/**
- *
- * @author Uomrod-PC
- */
 public class UserController {
     private String email;
 

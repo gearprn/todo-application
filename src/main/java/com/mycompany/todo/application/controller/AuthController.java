@@ -18,11 +18,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-
-/**
- *
- * @author UomrodPC
- */
 public class AuthController {
     AuthResponse userInfo; 
     public static String signUpNewUser(String email, String password) throws IOException {
@@ -56,7 +51,6 @@ public class AuthController {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault(); CloseableHttpResponse response = httpClient.execute(post)) {
 
-            // System.out.println(EntityUtils.toString(response.getEntity()));
             Gson gson = new Gson();
             AuthResponse userInfo = new AuthResponse(); 
             userInfo = gson.fromJson(EntityUtils.toString(response.getEntity()), AuthResponse.class);

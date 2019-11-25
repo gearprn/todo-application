@@ -5,16 +5,21 @@
  */
 package com.mycompany.todo.application.controller;
 
-/**
- *
- * @author Uomrod-PC
- */
 public class TaskResponse {
     private String id;
     private String task;
     private String isDone;
     private String date;
     private String fistTimeEdit;
+    private String project;
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
 
     public String getId() {
         return id;

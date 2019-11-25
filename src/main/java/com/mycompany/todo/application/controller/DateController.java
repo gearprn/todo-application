@@ -10,10 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- *
- * @author Uomrod-PC
- */
 public class DateController {
     private String dateFormat;
     private String docFormat;

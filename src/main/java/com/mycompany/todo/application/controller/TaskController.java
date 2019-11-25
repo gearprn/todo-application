@@ -28,40 +28,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- *
- * @author Uomrod-PC
- */
 public class TaskController {
-
     private Firestore database = null;
     private DateController dateController = new DateController();
     private Calendar calendar = Calendar.getInstance();
     private ArrayList<TaskResponse> Task = new ArrayList<>();
-    private ArrayList<String> group = new ArrayList<>();
-    
-    private String mail = "gearprn@gmail.com";
-    private String name = "test";
-    
-    
-    public static void main(String[] args) {
-        TaskController test = null;
-        
-        try {
-            test = new TaskController();
-        } catch (InterruptedException | ExecutionException | IOException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
-            System.out.println(test.getProjects("gearprn@gmail.com"));
-        } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(TaskController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    private ArrayList<String> projects = new ArrayList<>();
     
     public TaskController() throws InterruptedException, ExecutionException, FileNotFoundException, IOException {
         InputStream serviceAccount = new FileInputStream("./serviceAccount.json");
@@ -75,11 +48,21 @@ public class TaskController {
     
     public String addProject(String email, String projrctName) throws InterruptedException, ExecutionException {
         Map<String, Object> data = new HashMap<>();
-        data.put("projectName", projrctName);
+        //data.put("projectName", projrctName);
+        
+        
+        DocumentReference docRef = database.collection(email).document("projects");
+        ApiFuture<DocumentSnapshot> future = docRef.get();
+        DocumentSnapshot document = future.get();
+        
+        if (!document.exists()) {
+            System.out.println("first create project doc!");
+            ApiFuture<WriteResult> addedDocRef = docRef.set(data);
+            System.out.println("Added document with ID: " + addedDocRef.get().getUpdateTime());
+        } 
         
         DocumentReference addedDocRef = database.collection(email).document("projects");
-        ApiFuture<WriteResult> arrayUnion = addedDocRef.update("name",
-            FieldValue.arrayUnion(projrctName));
+        ApiFuture<WriteResult> arrayUnion = addedDocRef.update("name", FieldValue.arrayUnion(projrctName));
         
         System.out.println("Update time : " + arrayUnion.get());
         return"";
@@ -111,12 +94,12 @@ public class TaskController {
         DocumentSnapshot document = future.get();
         if (document.exists()) {
             System.out.println("Document data: " + document.getData());
-            group = (ArrayList<String>) document.get("name");
-            System.out.println(group.size());
+            projects = (ArrayList<String>) document.get("name");
+            System.out.println(projects.size());
         } else {
           System.out.println("No such document!");
         }
-        return group;
+        return projects;
     }
     
     public ArrayList<TaskResponse> getProjectTasks(String email, String projectName) throws InterruptedException, ExecutionException {
