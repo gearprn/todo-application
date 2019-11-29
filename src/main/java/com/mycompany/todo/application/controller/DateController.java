@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateController {
     private String dateFormat;
@@ -19,7 +20,7 @@ public class DateController {
         c.add(Calendar.DAY_OF_YEAR, num);
         Date date = c.getTime();
         
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE d MMM");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE d MMM", Locale.US);
         return dateFormat.format(date);
     }
 
@@ -31,7 +32,7 @@ public class DateController {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DAY_OF_YEAR, num);
         Date date = c.getTime();
-        SimpleDateFormat documentFormat = new SimpleDateFormat("dMMMYY");
+        SimpleDateFormat documentFormat = new SimpleDateFormat("dMMMYY", Locale.US);
         return documentFormat.format(date);
     }
 

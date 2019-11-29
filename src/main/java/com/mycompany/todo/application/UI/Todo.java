@@ -110,6 +110,7 @@ public class Todo extends javax.swing.JFrame {
         
         user = new UserController();
         this.user.setEmail(email);
+        this.project = "notSelectProjectYet";
         
         jLabel7.setIcon(new ImageIcon("./assets/redLind.png"));
         jLabel10.setIcon(new ImageIcon("./assets/redLind.png"));
